@@ -1,0 +1,16 @@
+[package]
+name = "ksp_bevy"
+version = "0.1.0"
+edition = "2024"
+
+# Optional: Für schnellere Iterationen im Debug-Mode
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[dependencies]
+bevy = { version = "0.18.0", features = ["dynamic_linking"] }
+bevy_egui = "0.39.0"
+big_space = { git = "https://github.com/he-chien-tsai/big_space", features = ["i128"] }

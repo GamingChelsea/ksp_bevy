@@ -1,0 +1,12 @@
+# Erlaubt etwas längere Zeilen für komplexe Bevy-Queries
+# max_width = 110
+# Gruppiert Imports sauber – wichtig bei vielen Bevy-Modulen
+group_imports = "StdExternalCrate"
+# Macht Enums wie dein `ReferenceFrame` kompakter
+use_small_heuristics = "Max"
+# Sorgt für Ordnung bei den let-Statements deiner Mathe-Logik
+align_multiline_comment = true
+
+
+max_width = 80
+indent_style = "Visual"
