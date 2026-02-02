@@ -14,3 +14,5 @@ opt-level = 3
 bevy = { version = "0.18.0", features = ["dynamic_linking"] }
 bevy_egui = "0.39.0"
 big_space = { git = "https://github.com/he-chien-tsai/big_space", features = ["i128"] }
+strum = "0.27.2"
+strum_macros = "0.27.2"

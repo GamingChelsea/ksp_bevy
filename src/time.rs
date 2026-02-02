@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use strum_macros::EnumIter;
 
 #[derive(Resource, Default)]
 pub struct UniversalTime(pub f64);
@@ -8,10 +9,44 @@ pub struct TimePlugin;
 impl Plugin for TimePlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<UniversalTime>()
+            .init_resource::<WarpFactor>()
             .add_systems(Update, tick_universal_time);
     }
 }
 
-fn tick_universal_time(time: Res<Time>, mut ut: ResMut<UniversalTime>) {
-    ut.0 += time.delta_secs_f64();
+fn tick_universal_time(
+    time: Res<Time>,
+    mut ut: ResMut<UniversalTime>,
+    warp_factor: Res<WarpFactor>,
+) {
+    ut.0 += time.delta_secs_f64() * warp_factor.value();
+}
+
+#[derive(Resource, Default, PartialEq, Clone, Copy, EnumIter, Debug)]
+pub enum WarpFactor {
+    Half,
+    #[default]
+    One,
+    Two,
+    Three,
+    Five,
+    Ten,
+    Hundred,
+    Thousand,
+    TenThousand,
+}
+impl WarpFactor {
+    fn value(&self) -> f64 {
+        match self {
+            Self::Half => 0.5,
+            Self::One => 1.0,
+            Self::Two => 2.0,
+            Self::Three => 3.0,
+            Self::Five => 5.0,
+            Self::Ten => 10.0,
+            Self::Hundred => 100.0,
+            Self::Thousand => 1000.0,
+            Self::TenThousand => 10000.0,
+        }
+    }
 }

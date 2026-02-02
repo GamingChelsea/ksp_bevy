@@ -30,20 +30,25 @@ fn camera_controller(
 ) {
     let Ok((mut transform, config)) = query.single_mut() else { return };
 
+    let activate_camera_control = keyboard.pressed(KeyCode::AltLeft);
     // --- ROTATION (Maus) ---
-    let mut rotation_move = Vec2::ZERO;
-    rotation_move += mouse_motion.delta;
+    if activate_camera_control {
+        let mut rotation_move = Vec2::ZERO;
+        rotation_move += mouse_motion.delta;
 
-    if rotation_move.length_squared() > 0.0 {
-        let delta_x = rotation_move.x * config.sensitivity * time.delta_secs();
-        let delta_y = rotation_move.y * config.sensitivity * time.delta_secs();
+        if rotation_move.length_squared() > 0.0 {
+            let delta_x =
+                rotation_move.x * config.sensitivity * time.delta_secs();
+            let delta_y =
+                rotation_move.y * config.sensitivity * time.delta_secs();
 
-        // Yaw (Links/Rechts) - Rotation um die globale Y-Achse
-        let yaw = Quat::from_rotation_y(-delta_x);
-        // Pitch (Hoch/Runter) - Rotation um die lokale X-Achse
-        let pitch = Quat::from_rotation_x(-delta_y);
+            // Yaw (Links/Rechts) - Rotation um die globale Y-Achse
+            let yaw = Quat::from_rotation_y(-delta_x);
+            // Pitch (Hoch/Runter) - Rotation um die lokale X-Achse
+            let pitch = Quat::from_rotation_x(-delta_y);
 
-        transform.rotation = yaw * transform.rotation * pitch;
+            transform.rotation = yaw * transform.rotation * pitch;
+        }
     }
 
     // --- BEWEGUNG (WASD) ---
