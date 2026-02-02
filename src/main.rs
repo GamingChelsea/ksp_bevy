@@ -1,6 +1,7 @@
 mod camera;
 mod debug_ui;
 mod orbit;
+mod planet;
 mod spatial_ui;
 mod time;
 mod world;

@@ -11,7 +11,6 @@ impl Plugin for SpatialUIPlugin {
     }
 }
 
-// Dieses System zeichnet nun die Umlaufbahnen für alle Planeten, die eine OrbitConfig haben.
 pub fn draw_orbit_gizmos(
     mut gizmos: Gizmos,
     central_body_query: Query<&GlobalTransform, With<CentralBody>>,
@@ -37,12 +36,11 @@ pub fn draw_orbit_gizmos(
         rotation: final_rotation,
     };
 
-    // Iteriere über alle Körper mit einer OrbitConfig und zeichne ihren Orbit.
     for orbit_config in orbiting_bodies_query.iter() {
         gizmos
             .circle(
                 gizmo_isometry,
-                orbit_config.radius as f32, // Verwende den Radius aus der Config des Planeten
+                orbit_config.radius as f32,
                 Color::from(bevy::color::palettes::basic::WHITE),
             )
             .resolution(128);

@@ -1,5 +1,5 @@
 use crate::camera::DebugFlyCam;
-use crate::orbit::OrbitConfig;
+use crate::planet::setup_planets;
 use bevy::prelude::*;
 use big_space::prelude::*;
 
@@ -24,7 +24,7 @@ pub fn setup_solar_system(
 
         // Sonne
         parent.spawn((
-            Mesh3d(meshes.add(Sphere::new(5.0).mesh().ico(5).unwrap())),
+            Mesh3d(meshes.add(Sphere::new(3.0).mesh().ico(5).unwrap())),
             MeshMaterial3d(materials.add(StandardMaterial {
                 base_color: Color::from(bevy::color::palettes::basic::YELLOW),
                 emissive: LinearRgba::rgb(1.0, 1.0, 0.5),
@@ -34,35 +34,7 @@ pub fn setup_solar_system(
             CentralBody,
         ));
 
-        // Ein Planet (Der sich bewegen wird)
-        parent.spawn((
-            Mesh3d(meshes.add(Sphere::new(2.0).mesh().ico(4).unwrap())),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::from(bevy::color::palettes::basic::BLUE),
-                ..default()
-            })),
-            CellCoord::default(),
-            OrbitConfig {
-                radius: 30.0,
-                completion_speed: 0.5,
-                start_phase: 0.0,
-            },
-        ));
-
-        // Ein weiterer Planet (Der sich bewegen wird)
-        parent.spawn((
-            Mesh3d(meshes.add(Sphere::new(2.0).mesh().ico(4).unwrap())),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::from(bevy::color::palettes::basic::GREEN),
-                ..default()
-            })),
-            CellCoord::default(),
-            OrbitConfig {
-                radius: 30.0,
-                completion_speed: 0.5,
-                start_phase: 1.0,
-            },
-        ));
+        setup_planets(&mut meshes, &mut materials, parent);
 
         // Licht
         parent.spawn((

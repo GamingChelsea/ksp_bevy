@@ -2,7 +2,7 @@ use crate::time::UniversalTime;
 use bevy::prelude::*;
 use big_space::prelude::*;
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct OrbitConfig {
     pub radius: f64,
     pub completion_speed: f64,
