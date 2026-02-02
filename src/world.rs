@@ -3,6 +3,9 @@ use crate::orbit::OrbitConfig;
 use bevy::prelude::*;
 use big_space::prelude::*;
 
+#[derive(Component)]
+pub struct CentralBody;
+
 pub fn setup_solar_system(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -28,6 +31,7 @@ pub fn setup_solar_system(
                 ..default()
             })),
             CellCoord::default(),
+            CentralBody,
         ));
 
         // Ein Planet (Der sich bewegen wird)

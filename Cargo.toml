@@ -12,6 +12,7 @@ opt-level = 3
 
 [dependencies]
 bevy = { version = "0.18.0", features = ["dynamic_linking"] }
+bevy-inspector-egui = "0.36.0"
 bevy_egui = "0.39.0"
 big_space = { git = "https://github.com/he-chien-tsai/big_space", features = ["i128"] }
 strum = "0.27.2"

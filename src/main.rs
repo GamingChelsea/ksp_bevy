@@ -1,6 +1,7 @@
 mod camera;
 mod debug_ui;
 mod orbit;
+mod spatial_ui;
 mod time;
 mod world;
 
@@ -18,6 +19,7 @@ fn main() {
         .add_plugins(orbit::OrbitPlugin)
         .add_plugins(camera::CameraPlugin)
         .add_plugins(debug_ui::DebugUIPlugin)
+        .add_plugins(spatial_ui::SpatialUIPlugin)
         // Setup System
         .add_systems(Startup, world::setup_solar_system)
         .run();

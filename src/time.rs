@@ -34,6 +34,7 @@ pub enum WarpFactor {
     Hundred,
     Thousand,
     TenThousand,
+    HundredThousand,
 }
 impl WarpFactor {
     fn value(&self) -> f64 {
@@ -47,6 +48,7 @@ impl WarpFactor {
             Self::Hundred => 100.0,
             Self::Thousand => 1000.0,
             Self::TenThousand => 10000.0,
+            Self::HundredThousand => 100000.0,
         }
     }
 }
