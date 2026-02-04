@@ -30,9 +30,12 @@ pub fn check_soi_transitions(
             grid.0.grid_position_double(planet_cell, planet_transform);
 
         // 3. Distanz im DVec3 Raum (f64 Präzision)
-        let distance = cam_pos.distance(planet_pos);
+        // Optimization: Use squared distance to avoid expensive square root.
+        let distance_sq = cam_pos.distance_squared(planet_pos);
+        let soi_radius = soi.soi_radius as f64;
+        let soi_radius_sq = soi_radius * soi_radius;
 
-        if distance < soi.soi_radius as f64 {
+        if distance_sq < soi_radius_sq {
             info!("Kamera ist im Einflussbereich von Entity {:?}", planet_ent);
         }
     }
