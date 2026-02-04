@@ -25,8 +25,10 @@ fn update_orbit(
     for (mut transform, mut cell, orbit_config) in query.iter_mut() {
         let phase =
             (ut.0 * orbit_config.completion_speed) + orbit_config.start_phase;
-        let x_abs = orbit_config.radius * phase.cos();
-        let z_abs = orbit_config.radius * phase.sin();
+        // Optimization: Compute sin and cos in a single operation.
+        let (sin, cos) = phase.sin_cos();
+        let x_abs = orbit_config.radius * cos;
+        let z_abs = orbit_config.radius * sin;
 
         let (new_cell, new_translation) =
             grid.translation_to_grid([x_abs, 0.0, z_abs]);
