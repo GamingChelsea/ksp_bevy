@@ -20,6 +20,7 @@ pub struct PlanetSpec {
     pub soi_radius: f64,
 }
 
+#[allow(dead_code)]
 #[derive(Component)]
 pub struct PlanetSOI {
     pub soi_radius: f64,
