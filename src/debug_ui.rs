@@ -1,9 +1,11 @@
+use crate::planet::PlanetSOI;
 use crate::time::WarpFactor;
 use bevy::prelude::*;
-use bevy_egui::{EguiContexts, EguiPlugin, EguiPrimaryContextPass, egui};
+use bevy_egui::egui;
+use bevy_egui::{EguiContexts, EguiPlugin, EguiPrimaryContextPass};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use big_space::prelude::CellCoord;
 use strum::IntoEnumIterator;
-
 pub struct DebugUIPlugin;
 
 impl Plugin for DebugUIPlugin {
@@ -18,6 +20,10 @@ impl Plugin for DebugUIPlugin {
 fn debug_ui(
     mut contexts: EguiContexts,
     mut warp_factor: ResMut<WarpFactor>,
+    planet_query: Query<
+        (Entity, &CellCoord, &Transform, &Name, &PlanetSOI),
+        With<PlanetSOI>,
+    >,
 ) -> Result {
     egui::Window::new("Time Warp").show(contexts.ctx_mut()?, |ui| {
         egui::ComboBox::from_label("Warp Factor")
@@ -31,6 +37,30 @@ fn debug_ui(
                     );
                 }
             });
+
+        ui.label(
+            "Controlls:
+              WASD - Move Camera
+              Space/Ctrl - Move Camera Vertically
+              Alt + Mouse - Rotate Camera",
+        )
     });
+
+    let default_roation = Quat::default();
+    for entity in planet_query.iter() {
+        let planet_translation = entity.2.translation.into();
+
+        let gizmo_isometry = Isometry3d {
+            translation: planet_translation,
+            rotation: default_roation,
+        };
+
+        gizmo().sphere(
+            gizmo_isometry,
+            entity.4.soi_radius as f32,
+            Color::from(bevy::color::palettes::basic::WHITE),
+        );
+    }
+
     Ok(())
 }

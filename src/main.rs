@@ -5,7 +5,9 @@ mod planet;
 mod space;
 mod spatial_ui;
 mod time;
+mod vessel;
 mod world;
+
 use bevy::prelude::*;
 use big_space::prelude::*;
 
@@ -22,6 +24,7 @@ fn main() {
         .add_plugins(debug_ui::DebugUIPlugin)
         .add_plugins(spatial_ui::SpatialUIPlugin)
         .add_plugins(world::WorldPlugin)
+        .add_plugins(vessel::VesselPlugin)
         // Setup System
         .add_systems(Update, space::check_soi_transitions)
         .run();

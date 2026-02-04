@@ -24,6 +24,7 @@ fn tick_universal_time(
 
 #[derive(Resource, Default, PartialEq, Clone, Copy, EnumIter, Debug)]
 pub enum WarpFactor {
+    Paused,
     Half,
     #[default]
     One,
@@ -39,6 +40,7 @@ pub enum WarpFactor {
 impl WarpFactor {
     fn value(&self) -> f64 {
         match self {
+            Self::Paused => 0.0,
             Self::Half => 0.5,
             Self::One => 1.0,
             Self::Two => 2.0,

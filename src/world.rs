@@ -1,5 +1,6 @@
 use crate::camera::DebugFlyCam;
 use crate::planet::setup_planets;
+use crate::vessel::spawn_test_vessel;
 use bevy::prelude::*;
 use big_space::prelude::*;
 
@@ -7,29 +8,19 @@ pub struct WorldPlugin;
 
 impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(GridRes::new())
-            .add_systems(Startup, setup_solar_system);
+        app.add_systems(Startup, setup_solar_system);
     }
 }
 
 #[derive(Component)]
 pub struct CentralBody;
 
-#[derive(Resource)]
-pub struct GridRes(pub big_space::grid::Grid);
-
-impl GridRes {
-    pub fn new() -> Self {
-        GridRes(big_space::grid::Grid::default())
-    }
-}
-
 pub fn setup_solar_system(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    commands.spawn_big_space(GridRes::new().0, |parent| {
+    commands.spawn_big_space(Grid::default(), |parent| {
         // Kamera
         parent.spawn((
             Camera3d::default(),
@@ -40,19 +31,9 @@ pub fn setup_solar_system(
             DebugFlyCam::default(),
         ));
 
-        // Sonne
-        parent.spawn((
-            Mesh3d(meshes.add(Sphere::new(3.0).mesh().ico(5).unwrap())),
-            MeshMaterial3d(materials.add(StandardMaterial {
-                base_color: Color::from(bevy::color::palettes::basic::YELLOW),
-                emissive: LinearRgba::rgb(1.0, 1.0, 0.5),
-                ..default()
-            })),
-            CellCoord::default(),
-            CentralBody,
-        ));
+        setup_planets(&mut meshes, &mut materials, parent);
 
-        setup_planets(meshes, &mut materials, parent);
+        spawn_test_vessel(parent, &mut meshes, &mut materials);
 
         // Licht
         parent.spawn((
