@@ -22,6 +22,11 @@ fn update_orbit(
     grid: Single<&Grid>,
     mut query: Query<(&mut Transform, &mut CellCoord, &OrbitConfig)>,
 ) {
+    // Performance optimization: skip processing if time hasn't advanced.
+    if !ut.is_changed() {
+        return;
+    }
+
     for (mut transform, mut cell, orbit_config) in query.iter_mut() {
         let phase =
             (ut.0 * orbit_config.completion_speed) + orbit_config.start_phase;

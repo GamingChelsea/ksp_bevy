@@ -10,11 +10,12 @@ pub enum ReferenceFrame {
 }
 
 pub fn check_soi_transitions(
+    grid: Single<&Grid>,
     camera_query: Query<(Entity, &CellCoord, &Transform), With<Camera>>,
     planets_query: Query<(Entity, &CellCoord, &Transform, &PlanetSOI, &Name)>,
 ) {
-    let grid = Grid::default();
-    let Ok((_cam_ent, cam_cellcoord, cam_transform)) = camera_query.single()
+    let Ok((_cam_ent, cam_cellcoord, cam_transform)) =
+        camera_query.get_single()
     else {
         return;
     };
