@@ -54,11 +54,23 @@ pub fn spawn_test_vessel(
 
 fn move_vessel(
     ut: Res<UniversalTime>,
-    mut query: Query<(&mut Transform, &KinematicState), With<Vessel>>,
+    grid: Single<&Grid>,
+    mut query: Query<
+        (&mut Transform, &mut CellCoord, &KinematicState),
+        With<Vessel>,
+    >,
 ) {
-    for (mut transform, kinematic_state) in query.iter_mut() {
-        let new_translation: DVec3 = kinematic_state.velocity * ut.0;
+    // Performance optimization: skip processing if time hasn't advanced.
+    if !ut.is_changed() {
+        return;
+    }
 
-        transform.translation = new_translation.as_vec3();
+    for (mut transform, mut cell, kinematic_state) in query.iter_mut() {
+        // High-precision movement using big_space Grid to handle cell transitions
+        let (new_cell, new_translation) =
+            grid.translation_to_grid(kinematic_state.velocity * ut.0);
+
+        *cell = new_cell;
+        transform.translation = new_translation;
     }
 }

@@ -19,7 +19,10 @@ fn tick_universal_time(
     mut ut: ResMut<UniversalTime>,
     warp_factor: Res<WarpFactor>,
 ) {
-    ut.0 += time.delta_secs_f64() * warp_factor.value();
+    let delta = time.delta_secs_f64() * warp_factor.value();
+    if delta != 0.0 {
+        ut.0 += delta;
+    }
 }
 
 #[derive(Resource, Default, PartialEq, Clone, Copy, EnumIter, Debug)]
