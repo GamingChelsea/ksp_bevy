@@ -14,8 +14,7 @@ pub fn check_soi_transitions(
     camera_query: Query<(Entity, &CellCoord, &Transform), With<Camera>>,
     planets_query: Query<(Entity, &CellCoord, &Transform, &PlanetSOI, &Name)>,
 ) {
-    let Ok((_cam_ent, cam_cellcoord, cam_transform)) =
-        camera_query.get_single()
+    let Ok((_cam_ent, cam_cellcoord, cam_transform)) = camera_query.single()
     else {
         return;
     };

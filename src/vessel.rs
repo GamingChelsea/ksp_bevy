@@ -1,5 +1,8 @@
 use bevy::{math::DVec3, prelude::*};
-use big_space::prelude::{CellCoord, GridCommands};
+use big_space::{
+    grid::Grid,
+    prelude::{CellCoord, GridCommands},
+};
 
 use crate::time::UniversalTime;
 
