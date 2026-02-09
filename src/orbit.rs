@@ -1,5 +1,5 @@
 use crate::time::UniversalTime;
-use bevy::prelude::*;
+use bevy::{math::DVec3, prelude::*};
 use big_space::prelude::*;
 
 #[derive(Component, Clone)]
@@ -7,6 +7,18 @@ pub struct OrbitConfig {
     pub radius: f64,
     pub completion_speed: f64,
     pub start_phase: f64,
+}
+
+impl OrbitConfig {
+    pub fn get_velocity_at_time(&self, ut: f64) -> DVec3 {
+        let phase = (ut * self.completion_speed) + self.start_phase;
+        let omega = self.completion_speed;
+
+        let vx = -self.radius * omega * phase.sin();
+        let vz = self.radius * omega * phase.cos();
+
+        DVec3::new(vx, 0.0, vz)
+    }
 }
 
 pub struct OrbitPlugin;

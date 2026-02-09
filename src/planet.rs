@@ -1,3 +1,5 @@
+use core::f64;
+
 use crate::{orbit::OrbitConfig, world::CentralBody};
 use bevy::prelude::*;
 use big_space::prelude::*;
@@ -21,44 +23,45 @@ pub struct PlanetSpec {
     pub central_b: bool,
 }
 
-#[allow(dead_code)]
 #[derive(Component)]
 pub struct PlanetSOI {
     pub soi_radius: f64,
     pub mass: f64,
 }
 
+#[derive(Component)]
+pub struct Planet;
+
 pub fn setup_planets(
-    meshes: &mut ResMut<Assets<Mesh>>, // Assets brauchen ResMut
+    meshes: &mut ResMut<Assets<Mesh>>,
     materials: &mut Assets<StandardMaterial>,
     parent: &mut GridCommands,
 ) {
-    // Liste der Planeten
     let planet_specs = vec![
         PlanetSpec {
             name: "Sonne",
-            radius: 3.0,
-            color: Color::srgb(1.0, 0.0, 0.5),
+            radius: 20.0,
+            color: Color::srgb(1.0, 0.9, 0.2),
             orbit: OrbitConfig {
                 radius: 0.0,
                 completion_speed: 0.0,
                 start_phase: 0.0,
             },
-            mass: 5.972e24,
-            soi_radius: 20.0,
+            mass: 50_000.0,
+            soi_radius: f64::MAX,
             central_b: true,
         },
         PlanetSpec {
             name: "Not Kerbin",
-            radius: 1.0,
-            color: Color::srgb(0.2, 0.5, 1.0),
+            radius: 5.0,
+            color: Color::srgb(0.2, 0.6, 1.0),
             orbit: OrbitConfig {
-                radius: 50.0,
-                completion_speed: 0.5,
+                radius: 250.0,
+                completion_speed: 0.056,
                 start_phase: 0.0,
             },
-            mass: 5.972e24,
-            soi_radius: 20.0,
+            mass: 10_000.0,
+            soi_radius: 60.0,
             central_b: false,
         },
     ];
@@ -78,6 +81,7 @@ pub fn setup_planets(
                 })),
             },
             Name::new(spec.name),
+            Planet,
         ));
 
         if spec.central_b {

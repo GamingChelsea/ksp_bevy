@@ -31,7 +31,6 @@ fn camera_controller(
     let Ok((mut transform, config)) = query.single_mut() else { return };
 
     let activate_camera_control = keyboard.pressed(KeyCode::AltLeft);
-    // --- ROTATION (Maus) ---
     if activate_camera_control {
         let mut rotation_move = Vec2::ZERO;
         rotation_move += mouse_motion.delta;
@@ -42,16 +41,13 @@ fn camera_controller(
             let delta_y =
                 rotation_move.y * config.sensitivity * time.delta_secs();
 
-            // Yaw (Links/Rechts) - Rotation um die globale Y-Achse
             let yaw = Quat::from_rotation_y(-delta_x);
-            // Pitch (Hoch/Runter) - Rotation um die lokale X-Achse
             let pitch = Quat::from_rotation_x(-delta_y);
 
             transform.rotation = yaw * transform.rotation * pitch;
         }
     }
 
-    // --- BEWEGUNG (WASD) ---
     let mut velocity = Vec3::ZERO;
     let local_forward = transform.forward();
     let local_right = transform.right();
@@ -76,7 +72,6 @@ fn camera_controller(
         velocity -= *local_up;
     }
 
-    // "Boost" mit Shift (Space ist groß!)
     let speed_multiplier =
         if keyboard.pressed(KeyCode::ShiftLeft) { 50.0 } else { 1.0 };
 

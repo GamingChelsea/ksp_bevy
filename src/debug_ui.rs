@@ -4,6 +4,7 @@ use bevy::prelude::*;
 use bevy_egui::egui;
 use bevy_egui::{EguiContexts, EguiPlugin, EguiPrimaryContextPass};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use big_space::grid::Grid;
 use big_space::prelude::CellCoord;
 use strum::IntoEnumIterator;
 pub struct DebugUIPlugin;
@@ -24,6 +25,7 @@ fn debug_ui(
         (Entity, &CellCoord, &Transform, &Name, &PlanetSOI),
         With<PlanetSOI>,
     >,
+    grid: Single<&Grid>,
 ) -> Result {
     egui::Window::new("Time Warp").show(contexts.ctx_mut()?, |ui| {
         egui::ComboBox::from_label("Warp Factor")
@@ -48,10 +50,13 @@ fn debug_ui(
 
     let default_roation = Quat::default();
     for entity in planet_query.iter() {
-        let planet_translation = entity.2.translation.into();
+        let cell_coord = entity.1;
+        let transform = entity.2;
+
+        let planet_translation = grid.global_transform(cell_coord, transform);
 
         let gizmo_isometry = Isometry3d {
-            translation: planet_translation,
+            translation: planet_translation.translation().into(),
             rotation: default_roation,
         };
 

@@ -6,7 +6,7 @@ pub struct SpatialUIPlugin;
 
 impl Plugin for SpatialUIPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, draw_orbit_gizmos);
+        app.add_systems(PostUpdate, draw_orbit_gizmos);
     }
 }
 

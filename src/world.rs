@@ -8,6 +8,7 @@ pub struct WorldPlugin;
 
 impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
+        app.init_resource::<GravityConstant>();
         app.add_systems(Startup, setup_solar_system);
     }
 }
@@ -15,17 +16,23 @@ impl Plugin for WorldPlugin {
 #[derive(Component)]
 pub struct CentralBody;
 
+#[derive(Resource, Default)]
+pub struct GravityConstant(pub i8);
+
 pub fn setup_solar_system(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
+    mut gravity_constant: ResMut<GravityConstant>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
+    gravity_constant.0 = 1;
+
     commands.spawn_big_space(Grid::default(), |parent| {
         // Kamera
         parent.spawn((
             Camera3d::default(),
-            Transform::from_xyz(0.0, 50.0, 100.0)
-                .looking_at(Vec3::ZERO, Vec3::Y),
+            Transform::from_xyz(0.0, 800.0, 0.0)
+                .looking_at(Vec3::ZERO, Vec3::X),
             FloatingOrigin,
             CellCoord::default(),
             DebugFlyCam::default(),

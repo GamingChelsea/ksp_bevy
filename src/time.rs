@@ -4,25 +4,29 @@ use strum_macros::EnumIter;
 #[derive(Resource, Default)]
 pub struct UniversalTime(pub f64);
 
+#[derive(Resource, Default)]
+pub struct GameTime(pub f64);
+
 pub struct TimePlugin;
 
 impl Plugin for TimePlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<UniversalTime>()
-            .init_resource::<WarpFactor>()
-            .add_systems(Update, tick_universal_time);
+        app.init_resource::<WarpFactor>()
+            .init_resource::<GameTime>()
+            .init_resource::<UniversalTime>()
+            .add_systems(Update, tick_game_universal_time);
     }
 }
 
-fn tick_universal_time(
+fn tick_game_universal_time(
     time: Res<Time>,
+    mut gt: ResMut<GameTime>,
     mut ut: ResMut<UniversalTime>,
     warp_factor: Res<WarpFactor>,
 ) {
     let delta = time.delta_secs_f64() * warp_factor.value();
-    if delta != 0.0 {
-        ut.0 += delta;
-    }
+    gt.0 = delta;
+    ut.0 += delta;
 }
 
 #[derive(Resource, Default, PartialEq, Clone, Copy, EnumIter, Debug)]
@@ -41,7 +45,7 @@ pub enum WarpFactor {
     HundredThousand,
 }
 impl WarpFactor {
-    fn value(&self) -> f64 {
+    pub fn value(&self) -> f64 {
         match self {
             Self::Paused => 0.0,
             Self::Half => 0.5,
