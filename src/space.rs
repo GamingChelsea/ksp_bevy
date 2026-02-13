@@ -27,6 +27,11 @@ pub fn check_soi_transitions(
         (With<Planet>, Without<CentralBody>),
     >,
 ) {
+    // Performance optimization: skip processing if time hasn't advanced.
+    if !ut.is_changed() {
+        return;
+    }
+
     let active_planets: Vec<(Entity, DVec3, f64)> = planets_query
         .iter()
         .map(|(ent, cell, trans, soi, _)| {

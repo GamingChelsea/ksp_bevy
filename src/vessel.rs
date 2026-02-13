@@ -114,10 +114,9 @@ pub fn move_vessel(
                 if let Some(orbit) = p_orbit {
                     let phase =
                         (ut.0 * orbit.completion_speed) + orbit.start_phase;
-                    let vx =
-                        -orbit.radius * orbit.completion_speed * phase.sin();
-                    let vz =
-                        orbit.radius * orbit.completion_speed * phase.cos();
+                    let (sin, cos) = phase.sin_cos();
+                    let vx = -orbit.radius * orbit.completion_speed * sin;
+                    let vz = orbit.radius * orbit.completion_speed * cos;
                     frame_velocity_offset = DVec3::new(vx, 0.0, vz);
                 }
             }

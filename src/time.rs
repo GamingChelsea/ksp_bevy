@@ -25,8 +25,16 @@ fn tick_game_universal_time(
     warp_factor: Res<WarpFactor>,
 ) {
     let delta = time.delta_secs_f64() * warp_factor.value();
-    gt.0 = delta;
-    ut.0 += delta;
+
+    // Optimization: Only mutate resources if time actually advanced.
+    // This enables effective use of `is_changed()` change detection in simulation systems.
+    if delta > 0.0 {
+        gt.0 = delta;
+        ut.0 += delta;
+    } else if gt.0 != 0.0 {
+        // If it was non-zero before, we still need to set it to zero once.
+        gt.0 = 0.0;
+    }
 }
 
 #[derive(Resource, Default, PartialEq, Clone, Copy, EnumIter, Debug)]

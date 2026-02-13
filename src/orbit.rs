@@ -14,8 +14,9 @@ impl OrbitConfig {
         let phase = (ut * self.completion_speed) + self.start_phase;
         let omega = self.completion_speed;
 
-        let vx = -self.radius * omega * phase.sin();
-        let vz = self.radius * omega * phase.cos();
+        let (sin, cos) = phase.sin_cos();
+        let vx = -self.radius * omega * sin;
+        let vz = self.radius * omega * cos;
 
         DVec3::new(vx, 0.0, vz)
     }
