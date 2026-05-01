@@ -42,9 +42,12 @@ fn debug_ui(
 
         ui.label(
             "Controlls:
-              WASD - Move Camera
-              Space/Ctrl - Move Camera Vertically
-              Alt + Mouse - Rotate Camera",
+            Toggle Freemode
+            Alt + Mouse - Rotate Camera
+            Freecam:
+                WASD - Move Camera
+                Space/Ctrl - Move Camera Vertically
+            ",
         )
     });
 
