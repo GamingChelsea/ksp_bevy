@@ -1,5 +1,3 @@
-use std::ops::Mul;
-
 use crate::vessel::Vessel;
 use bevy::input::mouse::AccumulatedMouseMotion;
 use bevy::input::mouse::AccumulatedMouseScroll;
